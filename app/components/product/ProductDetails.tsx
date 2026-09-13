@@ -1,9 +1,15 @@
 import { Form } from "react-router";
 import type { Product } from "~/lib/api";
 
-export function ProductDetails({ product, isAdding }: { product: Product; isAdding: boolean }) {
+export function ProductDetails({
+  product,
+  isAdding,
+}: {
+  product: Product;
+  isAdding: boolean;
+}) {
   return (
-    <div className="w-96 shrink-0">
+    <div className="w-full shrink-0 md:w-96">
       <h1 className="text-xl font-semibold">{product.title}</h1>
       <p className="mt-1 text-lg font-semibold">${product.price.toFixed(2)}</p>
 
@@ -20,7 +26,9 @@ export function ProductDetails({ product, isAdding }: { product: Product; isAddi
       <hr className="my-6 border-gray-900" />
 
       <h2 className="mb-2 text-sm">Product Details</h2>
-      <p className="text-sm leading-relaxed text-gray-600">{product.description}</p>
+      <p className="text-sm leading-relaxed text-gray-600">
+        {product.description}
+      </p>
     </div>
   );
 }

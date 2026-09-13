@@ -9,7 +9,7 @@ export function CartSummary({ subtotal, shipping }: CartSummaryProps) {
   const total = subtotal + shipping;
 
   return (
-    <div className="w-72 shrink-0 rounded-2xl border border-gray-800 p-5">
+    <div className="w-full shrink-0 rounded-2xl border border-gray-800 p-5 md:w-100">
       <h2 className="mb-4 font-semibold">Cart Summary</h2>
 
       <div className="text-sm text-gray-700 flex flex-col gap-2">
