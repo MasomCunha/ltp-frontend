@@ -1,11 +1,14 @@
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  Link,
-} from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Header } from "~/components/layout/Header";
+import { getCart } from "~/lib/cart.server";
+import type { Route } from "./+types/root";
+import "./app.css";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const { cart } = await getCart(request);
+  const cartCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+  return { cartCount };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,10 +20,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <header>
-          <Link to="/">LTP Store</Link>
-          <Link to="/cart">🛒 Cart</Link>
-        </header>
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -29,6 +28,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
-  return <Outlet />;
+export default function App({ loaderData }: Route.ComponentProps) {
+  return (
+    <>
+      <Header cartCount={loaderData?.cartCount ?? 0} />
+      <Outlet />
+    </>
+  );
 }

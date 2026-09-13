@@ -1,7 +1,7 @@
 import { createCookieSessionStorage } from "react-router";
 
 type CartData = {
-  cart: Record<string, number>; 
+  cart: Record<string, number>;
 };
 
 const { getSession, commitSession } = createCookieSessionStorage<CartData>({
@@ -27,9 +27,13 @@ export async function addToCart(request: Request, productId: string, quantity = 
   return session;
 }
 
-export async function removeFromCart(request: Request, productId: string) {
+export async function updateCartItem(request: Request, productId: string, quantity: number) {
   const { session, cart } = await getCart(request);
-  delete cart[productId];
+  if (quantity <= 0) {
+    delete cart[productId];
+  } else {
+    cart[productId] = quantity;
+  }
   session.set("cart", cart);
   return session;
 }

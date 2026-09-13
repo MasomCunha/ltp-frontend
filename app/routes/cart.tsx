@@ -1,7 +1,11 @@
-import { Form } from "react-router";
 import type { Route } from "./+types/cart";
 import { getProduct } from "~/lib/api";
-import { getCart, removeFromCart, commitSession } from "~/lib/cart.server";
+import { getCart, updateCartItem, commitSession } from "~/lib/cart.server";
+import { CartItem } from "~/components/cart/CartItem";
+import { CartSummary } from "~/components/cart/CartSummary";
+import { PageWrapper } from "~/components/layout/PageWrapper";
+
+const SHIPPING = 20;
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { cart } = await getCart(request);
@@ -11,50 +15,56 @@ export async function loader({ request }: Route.LoaderArgs) {
     entries.map(async ([id, quantity]) => {
       const product = await getProduct(id);
       return { product, quantity };
-    })
+    }),
   );
 
-  const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-
-  return { items, total };
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0,
+  );
+  return { items, subtotal };
 }
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
+  const intent = String(formData.get("intent"));
   const productId = String(formData.get("productId"));
-  const session = await removeFromCart(request, productId);
+
+  const { cart } = await getCart(request);
+  const currentQty = cart[productId] ?? 0;
+
+  const nextQty =
+    intent === "increment"
+      ? currentQty + 1
+      : intent === "decrement"
+        ? currentQty - 1
+        : 0; // remove
+
+  const session = await updateCartItem(request, productId, nextQty);
 
   return new Response(null, {
     status: 302,
-    headers: {
-      Location: "/cart",
-      "Set-Cookie": await commitSession(session),
-    },
+    headers: { Location: "/cart", "Set-Cookie": await commitSession(session) },
   });
 }
 
 export default function Cart({ loaderData }: Route.ComponentProps) {
-  const { items, total } = loaderData;
+  const { items, subtotal } = loaderData;
 
   return (
-    <main>
-      <h1>Shopping Cart</h1>
-      {items.length === 0 && <p>O carrinho está vazio.</p>}
-      <ul>
+    <PageWrapper>
+      <div className="flex-1">
+        {items.length === 0 && (
+          <p className="text-sm text-gray-500">O carrinho está vazio.</p>
+        )}
         {items.map(({ product, quantity }) => (
-          <li key={product.id}>
-            <img src={product.thumbnail} alt={product.title} width={80} />
-            <span>{product.title}</span>
-            <span>Qty: {quantity}</span>
-            <span>${(product.price * quantity).toFixed(2)}</span>
-            <Form method="post">
-              <input type="hidden" name="productId" value={product.id} />
-              <button type="submit">Remover</button>
-            </Form>
-          </li>
+          <CartItem key={product.id} product={product} quantity={quantity} />
         ))}
-      </ul>
-      <p>Total: ${total.toFixed(2)}</p>
-    </main>
+      </div>
+      <CartSummary
+        subtotal={subtotal}
+        shipping={items.length > 0 ? SHIPPING : 0}
+      />
+    </PageWrapper>
   );
 }
