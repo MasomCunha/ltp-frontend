@@ -19,7 +19,7 @@ export function SortDropdown({ value, onChange }: SortDropdownProps) {
     <select
       value={value ?? ""}
       onChange={(e) => onChange(e.target.value)}
-      className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm w-26"
+      className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm w-26 cursor-pointer"
     >
       {OPTIONS.map((opt) => (
         <option key={opt.value} value={opt.value}>

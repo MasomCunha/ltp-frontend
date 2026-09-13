@@ -27,7 +27,7 @@ export function CartSummary({ subtotal, shipping }: CartSummaryProps) {
         </div>
       </div>
 
-      <button className="w-full mt-4 rounded bg-[#1F3044] py-2 px-4 text-sm text-white">
+      <button className="w-full mt-4 rounded bg-[#1F3044] py-2 px-4 text-sm text-white cursor-pointer">
         Check out
       </button>
       <p className="mt-4 text-center text-xs text-[#1F3044]">
@@ -45,7 +45,7 @@ export function CartSummary({ subtotal, shipping }: CartSummaryProps) {
             className="flex-1 rounded border border-[#1F3044] px-3 py-2 text-sm placeholder-[#1F3044]"
           />
           <Form method="post">
-            <button className="rounded bg-[#1F3044] px-3 py-2 text-sm text-white">
+            <button className="rounded bg-[#1F3044] px-3 py-2 text-sm text-white cursor-pointer">
               Apply
             </button>
           </Form>

@@ -6,7 +6,11 @@ type CategoriesPanelProps = {
   onSelect: (slug: string | undefined) => void;
 };
 
-export function CategoriesPanel({ categories, activeCategory, onSelect }: CategoriesPanelProps) {
+export function CategoriesPanel({
+  categories,
+  activeCategory,
+  onSelect,
+}: CategoriesPanelProps) {
   return (
     <aside className="w-48 shrink-0">
       <p className="mb-3">Categories</p>
@@ -14,9 +18,12 @@ export function CategoriesPanel({ categories, activeCategory, onSelect }: Catego
         {categories.map((c) => (
           <li key={c.slug} className="flex items-center gap-2">
             <input
+              className="cursor-pointer"
               type="checkbox"
               checked={activeCategory === c.slug}
-              onChange={() => onSelect(activeCategory === c.slug ? undefined : c.slug)}
+              onChange={() =>
+                onSelect(activeCategory === c.slug ? undefined : c.slug)
+              }
             />
             <span>{c.name}</span>
           </li>
