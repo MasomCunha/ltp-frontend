@@ -1,31 +1,87 @@
-# Ltp Frontend
+# Welcome to React Router!
 
-A minimal Remix application starter with a home page.
+A modern, production-ready template for building full-stack React applications using React Router.
 
-## Starter Shape
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-- `app/actions/controller.tsx` owns the top-level route actions.
-- `app/actions/home-page.tsx` and `app/actions/document.tsx` render the route-owned starter UI.
-- `app/actions/public/` contains the browser runtime entry and interactive prompt button.
-- `app/routes.ts` defines the shared route contract used by server and browser modules for type-safe hrefs.
-- `app/router.ts` wires routes to handlers and installs the standard Remix UI renderer used by actions.
-- `app/assets.ts` owns the server-side asset pipeline used by the asset route and render middleware.
-- Root `public/` contains static files served unchanged from the app root.
+## Features
 
-## Growing The App
+- 🚀 Server-side rendering
+- ⚡️ Hot Module Replacement (HMR)
+- 📦 Asset bundling and optimization
+- 🔄 Data loading and mutations
+- 🔒 TypeScript by default
+- 🎉 TailwindCSS for styling
+- 📖 [React Router docs](https://reactrouter.com/)
 
-- Put top-level route actions in `app/actions/controller.tsx`.
-- Add `app/actions/<route-key>/controller.tsx` when a nested route map needs its own actions or middleware.
-- Add directories like `app/data/` or `test/` when the app actually needs them.
-- Move shared UI into `app/ui/` once more than one route needs it.
+## Getting Started
 
-## Commands
+### Installation
 
-```sh
-npm i
-npm run dev
-npm run hmr
-npm run start
-npm test
-npm run typecheck
+Install the dependencies:
+
+```bash
+npm install
 ```
+
+### Development
+
+Start the development server with HMR:
+
+```bash
+npm run dev
+```
+
+Your application will be available at `http://localhost:5173`.
+
+## Building for Production
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+## Deployment
+
+### Docker Deployment
+
+To build and run using Docker:
+
+```bash
+docker build -t my-app .
+
+# Run the container
+docker run -p 3000:3000 my-app
+```
+
+The containerized application can be deployed to any platform that supports Docker, including:
+
+- AWS ECS
+- Google Cloud Run
+- Azure Container Apps
+- Digital Ocean App Platform
+- Fly.io
+- Railway
+
+### DIY Deployment
+
+If you're familiar with deploying Node applications, the built-in app server is production-ready.
+
+Make sure to deploy the output of `npm run build`
+
+```
+├── package.json
+├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── build/
+│   ├── client/    # Static assets
+│   └── server/    # Server-side code
+```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+
+---
+
+Built with ❤️ using React Router.

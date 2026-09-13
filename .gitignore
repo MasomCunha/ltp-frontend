@@ -1,4 +1,7 @@
-node_modules/
-db/*.sqlite
-tmp/
 .DS_Store
+.env
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
