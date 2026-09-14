@@ -1,87 +1,96 @@
-# Welcome to React Router!
+# LTP Store — Online Store Coding Challenge
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Aplicação de e-commerce simples desenvolvida em **React Router (Remix)**, que permite listar produtos, ver o detalhe de cada um, adicioná-los ao carrinho e rever o conteúdo do carrinho.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Tecnologias
 
-## Features
+- **[React Router v8](https://reactrouter.com/)** (modo framework, sucessor do Remix) — routing, loaders e actions server-side
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS v4** (via `@tailwindcss/vite`) — estilização utility-first
+- **[lucide-react](https://lucide.dev/)** — biblioteca de ícones
+- **[DummyJSON API](https://dummyjson.com/)** — fonte de dados de produtos e categorias
+- **Vite** — bundler / dev server
+- Sessão de carrinho guardada em **cookie session** (server-side, via `createCookieSessionStorage`), sem necessidade de base de dados
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
+## Estrutura do projeto
 
 ```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+app/
+  components/
+    layout/
+      Header.tsx           
+      PageWrapper.tsx       
+    product/
+      ProductCard.tsx      
+      ProductGrid.tsx       
+      ProductsPanel.tsx    
+      CategoriesPanel.tsx  
+      SortDropdown.tsx     
+      Pagination.tsx        
+      ProductGallery.tsx    
+      ProductDetails.tsx    
+    cart/
+      CartItem.tsx          
+      CartSummary.tsx      
+  lib/
+    api.ts                  
+    cart.server.ts          
+  routes/
+    home.tsx                
+    product-detail.tsx      
+    cart.tsx                
+  root.tsx                 
+  routes.ts                 
 ```
 
-## Styling
+## Como correr o projeto
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+### Pré-requisitos
+- Node.js instalado (recomendado LTS mais recente)
+- npm (ou outro gestor de pacotes compatível)
 
----
+### Passos
 
-Built with ❤️ using React Router.
+1. Instalar as dependências:
+   ```bash
+   npm install
+   ```
+
+2. Correr em modo de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+   A aplicação fica disponível em `http://localhost:5173` (ou porta indicada no terminal).
+
+3. Build de produção:
+   ```bash
+   npm run build
+   ```
+
+4. Correr a build de produção:
+   ```bash
+   npm start
+   ```
+
+5. Verificação de tipos (TypeScript):
+   ```bash
+   npm run typecheck
+   ```
+
+## Funcionalidades implementadas
+
+- **Homepage**: listagem de produtos com paginação, ordenação (preço, nome, rating) e filtro por categoria — tudo através de `loader` e query params na URL (permite partilhar/guardar links filtrados)
+- **Página de detalhe**: dados do produto vindos de `loader`; botão "Add to Cart" implementado como `action` (formulário POST, com progressive enhancement)
+- **Carrinho de compras**:
+  - Acessível pelo ícone no header, com contagem de itens
+  - Lista de produtos, quantidade (com stepper +/-) e total
+  - Remoção de produtos
+  - Persistência via cookie session no servidor (não usa `localStorage`)
+- **Responsividade**: layout adapta-se a mobile/tablet/desktop (grid de produtos, painéis empilhados, categorias em duas colunas em ecrãs pequenos)
+
+## Notas técnicas
+
+- O carrinho usa `createCookieSessionStorage` do React Router — o estado vive numa cookie `httpOnly`, lida e escrita exclusivamente em `loader`/`action` no servidor.
+- O `secrets` da cookie session está definido como valor de desenvolvimento no código; em produção deve vir de uma variável de ambiente.
+- Os dados de produtos/categorias vêm sempre de `loader`s (nunca fetch no cliente), seguindo as boas práticas do React Router.
